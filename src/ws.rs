@@ -37,21 +37,18 @@ impl Client {
     ///
     /// A `from_block` of `None` will yield from the earliest indexed block (usually 0).
     /// A `to_block_inc` of `None` will lead to a head following stream.
-    pub async fn get_pair_created(
+    pub async fn get_pairs_created(
         &self,
-        pair: H160,
+        pairs_filter: impl IntoIterator<Item = H160>,
         from_block: Option<u64>,
         to_block_inc: Option<u64>,
-    ) -> Result<Option<PairCreated>> {
-        self.request(Operation::GetPair {
-            pair: pair.0,
+    ) -> Result<impl Stream<Item = Result<PairCreated>> + Send> {
+        self.request(Operation::GetPairs {
+            pairs: pairs_filter.into_iter().map(|pair| pair.0).collect(),
             start: from_block,
             end: to_block_inc,
         })
-        .await?
-        .next()
         .await
-        .transpose()
     }
 
     /// Get the uniswap v2 price quotes for the provided `pair` within the specified
@@ -61,12 +58,12 @@ impl Client {
     /// A `to_block_inc` of `None` will lead to a head following stream.
     pub async fn get_prices(
         &self,
-        pair: H160,
+        pairs_filter: impl IntoIterator<Item = H160>,
         from_block: Option<u64>,
         to_block_inc: Option<u64>,
     ) -> Result<impl Stream<Item = Result<Price>> + Send> {
         self.request(Operation::GetPrices {
-            pair: pair.0,
+            pairs: pairs_filter.into_iter().map(|pair| pair.0).collect(),
             start: from_block,
             end: to_block_inc,
         })
@@ -238,13 +235,13 @@ struct Request {
 #[derive(serde::Serialize)]
 #[serde(tag = "operation", rename_all = "camelCase")]
 enum Operation {
-    GetPair {
-        pair: [u8; 20],
+    GetPairs {
+        pairs: Vec<[u8; 20]>,
         start: Option<u64>,
         end: Option<u64>,
     },
     GetPrices {
-        pair: [u8; 20],
+        pairs: Vec<[u8; 20]>,
         start: Option<u64>,
         end: Option<u64>,
     },
