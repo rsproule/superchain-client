@@ -26,16 +26,16 @@ async fn main() {
     let (websocket, _) = connect_async(URL).await.unwrap();
     let client = WsClient::new(websocket).await;
 
-    // Then we tell the WsClient that we want pair logs
+    // Then we tell the WsClient that we want pair created events
     let stream = client
         .get_pairs_created(PAIRS_FILTER, FROM_BLOCK, TO_BLOCK_INC)
         .await
         .unwrap();
     futures::pin_mut!(stream);
 
-    // And that's it! Now we can stream prices:
+    // And that's it! Now we can stream pairs:
     while let Some(res) = stream.next().await {
-        let price = res.unwrap();
-        println!("{price:?}");
+        let pair = res.unwrap();
+        println!("{pair:?}");
     }
 }
