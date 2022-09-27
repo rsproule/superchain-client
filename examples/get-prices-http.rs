@@ -13,12 +13,13 @@ use sc_gateway::{
     HttpClient,
 };
 
-/// The pair we want to receive logs for
-const PAIR: &str = "";
+/// The pair we want to receive prices for
+/// (This is randomly selected)
+const PAIR: &str = "0x5281e311734869c64ca60ef047fd87759397efe6";
 /// The block height we want to receive logs from
-const FROM_BLOCK: u64 = 10_000_000;
+const FROM_BLOCK: u64 = 15_000_000;
 /// The base url endpoint
-const BASE_URL: &str = "http://localhost:8097/";
+const BASE_URL: &str = "http://localhost:8080/";
 
 #[tokio::main]
 async fn main() {

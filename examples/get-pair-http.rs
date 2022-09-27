@@ -8,13 +8,14 @@ use std::str::FromStr;
 use sc_gateway::{ethers::types::H160, reqwest::Client, url::Url, HttpClient};
 
 /// The pair we want to receive the PairCreated event for
-const PAIR: &str = "";
+/// (This is randomly selected)
+const PAIR: &str = "0xa39afc33a29b762edf70ad5b04fc344e2e57097b";
 /// The block height we want to search from
-const FROM_BLOCK: u64 = 10_000_000;
+const FROM_BLOCK: u64 = 15_000_000;
 /// The block height we want to search to (inclusive)
-const TO_BLOCK_INC: u64 = 15_000_000;
+const TO_BLOCK_INC: u64 = 15_600_000;
 /// The base url endpoint
-const BASE_URL: &str = "http://localhost:8097/";
+const BASE_URL: &str = "http://localhost:8080/";
 
 #[tokio::main]
 async fn main() {
