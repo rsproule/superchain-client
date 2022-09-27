@@ -36,7 +36,7 @@ impl Client {
 
     /// Get the uniswap v2 pair created event for the provided `pair`
     pub async fn get_pair_created(&self, pair: H160) -> Result<Option<PairCreated>> {
-        self.get_pair_created_(format!("{pair}")).await
+        self.get_pair_created_(format!("{:x}", pair)).await
     }
 
     /// Get the uniswap v2 pair created event for the provided `pair` within the specified
@@ -47,7 +47,7 @@ impl Client {
         block_range: std::ops::RangeInclusive<u64>,
     ) -> Result<Option<PairCreated>> {
         self.get_pair_created_(format!(
-            "{}/{}/{}",
+            "{:x}/{}/{}",
             pair,
             block_range.start(),
             block_range.end()
@@ -62,7 +62,7 @@ impl Client {
         pair: H160,
         from_block: u64,
     ) -> Result<Option<PairCreated>> {
-        self.get_pair_created_(format!("{}/{}", pair, from_block))
+        self.get_pair_created_(format!("{:x}/{}", pair, from_block))
             .await
     }
 
@@ -78,7 +78,7 @@ impl Client {
         block_range: std::ops::RangeInclusive<u64>,
     ) -> Result<impl Stream<Item = Result<Price>> + Send> {
         self.get_prices(format!(
-            "{}/{}/{}",
+            "{:x}/{}/{}",
             pair,
             block_range.start(),
             block_range.end()
@@ -92,7 +92,7 @@ impl Client {
         pair: H160,
         from_block: u64,
     ) -> Result<impl Stream<Item = Result<Price>> + Send> {
-        self.get_prices(format!("{}/{}", pair, from_block)).await
+        self.get_prices(format!("{:x}/{}", pair, from_block)).await
     }
 
     async fn get_prices(
