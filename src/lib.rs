@@ -11,20 +11,22 @@
 //! HTTP endpoints.
 //!
 //! ### API overview
+//! There are two ways to interface with SuperChain: HTTP and WebSocket
+//!
+//! The WebSocket interface is a lot more flexible and powerful, while also being simpler, so use
+//! this one whenever you can.
+//!
 //! #### HTTP
 //!
-//! ##### Get PairCreated event
 //! - [`HttpClient::get_pair_created`]\: Get the PairCreated event for a pair from the entire eth history
 //! - [`HttpClient::get_pair_created_in_range`]\: Get the PairCreated event for a pair from the provided block range
 //! - [`HttpClient::get_pair_created_live_stream`]\: Get the PairCreated event for a pair from the provided block and keep streaming from head
-//!
-//! ##### Get price quotes
 //! - [`HttpClient::get_prices_in_range`]\: Get all price quotes for a pair from the provided block range
 //! - [`HttpClient::get_prices_live_stream`]\: Get all price quotes for a pair from the provided block range and keep streaming from head
 //!
 //! #### WebSocket
 //!
-//! - [`WsClient::get_pair_created`]\: Get the PairCreated event for a pair from the specified block range
+//! - [`WsClient::get_pairs_created`]\: Get the PairCreated event for a pair from the specified block range
 //! - [`WsClient::get_prices`]\: Get all price quotes for a pair from the specified block range
 //!
 //! ### features

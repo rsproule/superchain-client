@@ -32,8 +32,11 @@ impl Client {
         Self { backend_tx: tx }
     }
 
-    /// Get the uniswap v2 pair created event for the provided `pair` within the specified
+    /// Get the uniswap v2 pair created events for the provided `pairs_filter` within the specified
     /// block range.
+    ///
+    /// A `pairs_filter` of `[]` or `None` will yield all `PairCreated` events. If one or more pair
+    /// hashes are specified, only these events will be returned (if present).
     ///
     /// A `from_block` of `None` will yield from the earliest indexed block (usually 0).
     /// A `to_block_inc` of `None` will lead to a head following stream.
@@ -51,8 +54,11 @@ impl Client {
         .await
     }
 
-    /// Get the uniswap v2 price quotes for the provided `pair` within the specified
+    /// Get the uniswap v2 price quotes for the provided `pairs_filter` within the specified
     /// block range.
+    ///
+    /// A `pairs_filter` of `[]` or `None` will yield price quotes for all pairs. If one or more
+    /// pair hashes are specified, only price quotes for these pairs will be returned (if present).
     ///
     /// A `from_block` of `None` will yield from the earliest indexed block (usually 0).
     /// A `to_block_inc` of `None` will lead to a head following stream.
