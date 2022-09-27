@@ -231,6 +231,7 @@ where
 #[derive(serde::Serialize)]
 struct Request {
     id: u8,
+    #[serde(flatten)]
     operation: Operation,
 }
 
