@@ -2,7 +2,7 @@
 
 An easy to use library to interface with the SuperChain API
 
-### Usage
+## Usage
 
 `superchain-client` exposes two types of clients: `WsClient` for using WebSockets and `HttpClient` for using classic HTTP.
 It's highly recommended to use the WebSocket client, since it is more flexible and powerful, while also exposing a 
