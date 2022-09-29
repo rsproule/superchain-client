@@ -12,7 +12,7 @@ const FROM_BLOCK: u64 = 15_000_000;
 /// The block height we want to search to (inclusive)
 const TO_BLOCK_INC: u64 = 15_600_000;
 /// The base url endpoint
-const BASE_URL: &str = "http://142.132.131.224:8080/";
+const BASE_URL: &str = "https://beta.superchain.app/";
 
 #[tokio::main]
 async fn main() {

@@ -16,7 +16,7 @@ const PAIR: &str = "0x5281e311734869c64ca60ef047fd87759397efe6";
 /// The block height we want to receive logs from
 const FROM_BLOCK: u64 = 15_000_000;
 /// The base url endpoint
-const BASE_URL: &str = "http://65.109.50.66:8080/";
+const BASE_URL: &str = "https://beta.superchain.app/";
 
 #[tokio::main]
 async fn main() {

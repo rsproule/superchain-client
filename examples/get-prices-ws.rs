@@ -16,7 +16,7 @@ const FROM_BLOCK: Option<u64> = Some(15_000_000);
 /// `None` means continue streaming from head
 const TO_BLOCK_INC: Option<u64> = None;
 /// The websocket endpoint url
-const URL: &str = "ws://142.132.131.224:8080/websocket";
+const URL: &str = "wss://beta.superchain.app/websocket";
 
 #[tokio::main]
 async fn main() {
