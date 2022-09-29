@@ -126,17 +126,23 @@ where
     }
 
     async fn run(mut self) -> Result<()> {
-        use futures::future::{self, Either};
+        use futures::future::Either;
 
         loop {
             let next_ws_msg = self.websocket.next();
             let next_operation = self.operation_rx.recv();
+            let ping = tokio::time::sleep(std::time::Duration::from_secs(1));
 
             let either = {
                 futures::pin_mut!(next_operation);
-                match future::select(next_ws_msg, next_operation).await {
-                    Either::Left((val, _)) => Either::Left(val),
-                    Either::Right((val, _)) => Either::Right(val),
+
+                tokio::select! {
+                    val = next_ws_msg => Either::Left(val),
+                    val = next_operation => Either::Right(val),
+                    _ = ping => {
+                        self.websocket.send(Message::Ping(Vec::new())).await?;
+                        continue;
+                    }
                 }
             };
 
