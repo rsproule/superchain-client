@@ -15,7 +15,7 @@ use crate::{
 type WsMsg = Result<Vec<u8>>;
 type OperationMsg = (Operation, mpsc::UnboundedSender<WsMsg>);
 
-/// A SuperChain WebSocket client
+/// A Superchain WebSocket client
 pub struct Client {
     backend_tx: mpsc::Sender<OperationMsg>,
 }

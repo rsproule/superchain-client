@@ -1,17 +1,17 @@
 //! SC-gateway
-//! A simple API wrapper for the SuperChain gateway
+//! A simple API wrapper for the Superchain gateway
 //!
-//! SuperChain is a start up with the mission provide easy and fast access to on chain data.
+//! Superchain is a start up with the mission provide easy and fast access to on chain data.
 //! This crate gives you easy access to a hand full of our endpoints. Namely `get_pair` and
 //! `get_prices`. These endpoints allow you to get a stream of all pair created events and all
 //! price quotes of uniswap v2.
 //!
 //! ### Introduction
-//! This crates allows you to easily use the SuperChain API. Both the WebSocket endpoints and the
+//! This crates allows you to easily use the Superchain API. Both the WebSocket endpoints and the
 //! HTTP endpoints.
 //!
 //! ### API overview
-//! There are two ways to interface with SuperChain: HTTP and WebSocket
+//! There are two ways to interface with Superchain: HTTP and WebSocket
 //!
 //! The WebSocket interface is a lot more flexible and powerful, while also being simpler, so use
 //! this one whenever you can.

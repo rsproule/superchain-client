@@ -2,7 +2,7 @@ use std::str::FromStr;
 
 // A lot of crates that you might need are reexported from `superchain-client`
 // Checkout the `[dev-dependencies]` section for deps that you might have to include manually
-use sc_gateway::{ethers::types::H160, reqwest::Client, url::Url, HttpClient};
+use superchain_client::{ethers::types::H160, reqwest::Client, url::Url, HttpClient};
 
 /// The pair we want to receive the PairCreated event for
 /// (This is randomly selected)

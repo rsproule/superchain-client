@@ -6,7 +6,7 @@ use crate::{
     Error, Result,
 };
 
-/// A SuperChain HTTP client
+/// A Superchain HTTP client
 pub struct Client {
     inner: reqwest::Client,
     headers: reqwest::header::HeaderMap,
@@ -16,7 +16,7 @@ pub struct Client {
 impl Client {
     /// Create a new [`Client`] with the specified API `base_url`
     ///
-    /// `base_url` is the URL of the SuperChain server without any path suffixes, like
+    /// `base_url` is the URL of the Superchain server without any path suffixes, like
     /// `http://localhost:8097/` or `https://123.4.5.123:8080/`.
     pub fn new(client: reqwest::Client, base_url: reqwest::Url) -> Self {
         Self {

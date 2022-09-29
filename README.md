@@ -1,6 +1,6 @@
 # Superchain-client
 
-An easy to use library to interface with the SuperChain API
+An easy to use library to interface with the Superchain API
 
 ## Usage
 
@@ -12,7 +12,7 @@ If you want to stream Unsiwap v2 prices, this is all you need:
 ```rust
 // A lot of crates that you might need are reexported from `superchain-client`
 // Checkout the `[dev-dependencies]` section for deps that you might have to include manually
-use sc_gateway::{
+use superchain_client::{
     ethers::types::H160,
     futures::{self, StreamExt},
     tokio_tungstenite::connect_async,
