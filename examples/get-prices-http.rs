@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-// A lot of crates that you might need are reexported from `sc-gateway`
+// A lot of crates that you might need are reexported from `superchain-client`
 // Checkout the `[dev-dependencies]` section for deps that you might have to include manually
 use sc_gateway::{
     ethers::types::H160,

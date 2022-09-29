@@ -4,13 +4,13 @@ An easy to use library to interface with the SuperChain API
 
 ### Usage
 
-`sc-gateway` exposes two types of clients: `WsClient` for using WebSockets and `HttpClient` for using classic HTTP.
+`superchain-client` exposes two types of clients: `WsClient` for using WebSockets and `HttpClient` for using classic HTTP.
 It's highly recommended to use the WebSocket client, since it is more flexible and powerful, while also exposing a 
 simpler interface.
 
 If you want to stream Unsiwap v2 prices, this is all you need:
 ```rust
-// A lot of crates that you might need are reexported from `sc-gateway`
+// A lot of crates that you might need are reexported from `superchain-client`
 // Checkout the `[dev-dependencies]` section for deps that you might have to include manually
 use sc_gateway::{
     ethers::types::H160,
