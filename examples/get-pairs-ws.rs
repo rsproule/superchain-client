@@ -1,6 +1,3 @@
-#[cfg(not(feature = "ws"))]
-compile_error!("This example requires the `ws` feature");
-
 // A lot of crates that you might need are reexported from `sc-gateway`
 // Checkout the `[dev-dependencies]` section for deps that you might have to include manually
 use sc_gateway::{
@@ -17,7 +14,7 @@ const FROM_BLOCK: Option<u64> = Some(15_000_000);
 /// `None` means continue streaming from head
 const TO_BLOCK_INC: Option<u64> = None;
 /// The websocket endpoint url
-const URL: &str = "ws://localhost:8080/websocket";
+const URL: &str = "ws://142.132.131.224:8080/websocket";
 
 #[tokio::main]
 async fn main() {

@@ -6,37 +6,30 @@ pub type Result<T, E = Error> = std::result::Result<T, E>;
 pub enum Error {
     /// The server sent and unexpected WebSocket message
     /// This should usually not happen
-    #[cfg(feature = "ws")]
     #[error("The server sent an unexpected message")]
     UnexpectedMessage,
     /// The server send a malformed message
     /// This should usually not happen
-    #[cfg(feature = "ws")]
     #[error("The server sent a malformed message")]
     UnexpectedMessageFormat,
     /// The server sent a response for a requests without a listener
     /// This should usually not happen
-    #[cfg(feature = "ws")]
     #[error("The server sent a response for a non existing request")]
     UnknownResponseId,
     /// The maximum limit of 256 concurrent requests was reached
     ///
     /// Note, that requests with open end (live streams) can currently not be unsubscribed.
     /// If you run into that you could create a new WebSocket connection to clean up
-    #[cfg(feature = "ws")]
     #[error("The maximum limit of 256 concurrent requests was reached")]
     MaxConcurrentRequestLimitReached,
     /// The backend websocket service shutdown
     /// This happens, when the server closes the connection
-    #[cfg(feature = "ws")]
     #[error("The backend service shut down")]
     BackendShutDown,
     /// The server sent an error message as part of the response
-    #[cfg(feature = "ws")]
     #[error("An error occurred while processing the request: {0}")]
     ErrorMsg(String),
     /// The websocket connection was closed by the server
-    #[cfg(feature = "ws")]
     #[error("The websocket connection was closed")]
     ConnectionClosed,
 
@@ -44,19 +37,15 @@ pub enum Error {
     #[error(transparent)]
     CsvAsync(#[from] csv_async::Error),
     /// An error encountered during making HTTP requests
-    #[cfg(feature = "http")]
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
     /// An error encountered during cbor parsing
-    #[cfg(feature = "ws")]
     #[error(transparent)]
     SerdeCbor(#[from] serde_cbor::Error),
     /// An error encountered during websocket handling
-    #[cfg(feature = "ws")]
     #[error(transparent)]
     Tungstenite(#[from] tungstenite::Error),
     /// An error encountered during url parsing
-    #[cfg(feature = "http")]
     #[error(transparent)]
     Url(#[from] url::ParseError),
 }

@@ -1,6 +1,3 @@
-#[cfg(not(feature = "http"))]
-compile_error!("This example requires the `http` feature");
-
 use std::str::FromStr;
 
 // A lot of crates that you might need are reexported from `sc-gateway`
@@ -15,7 +12,7 @@ const FROM_BLOCK: u64 = 15_000_000;
 /// The block height we want to search to (inclusive)
 const TO_BLOCK_INC: u64 = 15_600_000;
 /// The base url endpoint
-const BASE_URL: &str = "http://localhost:8080/";
+const BASE_URL: &str = "http://142.132.131.224:8080/";
 
 #[tokio::main]
 async fn main() {

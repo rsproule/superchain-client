@@ -28,37 +28,21 @@
 //!
 //! - [`WsClient::get_pairs_created`]\: Get the PairCreated event for a pair from the specified block range
 //! - [`WsClient::get_prices`]\: Get all price quotes for a pair from the specified block range
-//!
-//! ### features
-//! - `ws`: enables websocket support
-//! - `http`: enables http support
 
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
 #![deny(rust_2018_idioms, rustdoc::broken_intra_doc_links)]
 
-pub use ethers;
-pub use futures;
-pub use tokio;
-#[cfg(feature = "http")]
-pub use ::{reqwest, url};
-#[cfg(feature = "ws")]
-pub use ::{tokio_tungstenite, tungstenite};
+pub use ::{ethers, futures, reqwest, tokio, tokio_tungstenite, tungstenite, url};
 
-#[doc(inline)]
-#[cfg(feature = "http")]
-pub use crate::http::Client as HttpClient;
-#[doc(inline)]
-#[cfg(feature = "ws")]
-pub use crate::ws::Client as WsClient;
 #[doc(inline)]
 pub use crate::{
     error::{Error, Result},
+    http::Client as HttpClient,
     types::{PairCreated, Price, Side},
+    ws::Client as WsClient,
 };
 
 mod error;
-#[cfg(feature = "http")]
 mod http;
 mod types;
-#[cfg(feature = "ws")]
 mod ws;
