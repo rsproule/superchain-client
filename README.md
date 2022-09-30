@@ -33,11 +33,14 @@ const URL: &str = "wss://beta.superchain.app/websocket";
 #[tokio::main]
 async fn main() {
     // First, we create a new client
-    // TODO: set the basic auth token below to the one given to you
     let mut req = URL.into_client_request().expect("invalid url");
+    let config = Config::from_env();
     req.headers_mut().append(
         AUTHORIZATION,
-        HeaderValue::from_str("Basic xxxxxxxxxxxxxxxxxxxxxxxx").expect("invalid header value"),
+        config
+            .get_basic_authorization_value()
+            .try_into()
+            .expect("invalid auth value"),
     );
 
     let (websocket, _) = connect_async(req).await.unwrap();
@@ -62,14 +65,27 @@ For more examples have a look at the `examples/` directory.
 
 ## Credentials
 
-You will be given Basic Authorization credentials to use when accessing the http and websocket endpoints. Please make sure you set these correctly before you run the examples.
-You can use this tool to encode the Basic token for you: https://www.debugbear.com/basic-auth-header-generator
+You will be given a username and password to use to access the superchain api. The easiest way to use these credentials is to create a `.env` file in the same folder as this `README.md` file like so:
+```
+SC_USERNAME=xxxxx
+SC_PASSWORD=xxxxx
+```
+Just fill in the credentials given to you.
+
 
 ## Troubleshooting
 
 If you get the following error message you need to set the credentials as mentioned above
 
-```thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Http(Response { status: 401, version: HTTP/1.1, headers: {"content-length": "112", "cache-control": "no-cache", "content-type": "text/html", "www-authenticate": "Basic realm=\"www\"", "connection": "close"}, body: None })', examples/get-pairs-ws.rs:36:51```
+```
+thread 'main' panicked at 'SC_USERNAME environment variable: NotPresent', src/config.rs:13:48
+```
+
+If you get the message below then the credentials you have supplied are incorrect:
+
+```
+thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Http(Response { status: 401, version: HTTP/1.1, headers: {"content-length": "112", "cache-control": "no-cache", "content-type": "text/html", "www-authenticate": "Basic realm=\"www\"", "connection": "close"}, body: None })', examples/get-prices-ws.rs:38:51
+```
 
 ## Contributing
 

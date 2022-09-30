@@ -3,12 +3,10 @@ use std::str::FromStr;
 // A lot of crates that you might need are reexported from `superchain-client`
 // Checkout the `[dev-dependencies]` section for deps that you might have to include manually
 use superchain_client::{
+    config::Config,
     ethers::types::H160,
     futures::{self, StreamExt},
-    reqwest::{
-        header::{HeaderMap, HeaderValue},
-        Client,
-    },
+    reqwest::{header::HeaderMap, Client},
     url::Url,
     HttpClient,
 };
@@ -24,13 +22,16 @@ const BASE_URL: &str = "https://beta.superchain.app/";
 #[tokio::main]
 async fn main() {
     // First, we create a new client
-    // If you need to provide auth headers, you can call `HttpClient::with_default_headers`
     let http = Client::new();
     let base_url = Url::from_str(BASE_URL).unwrap();
     let mut headers = HeaderMap::new();
+    let config = Config::from_env();
     headers.append(
         "Authorization",
-        HeaderValue::from_str("Basic xxxxxxxxxxxxxxxxxxxxxxxx").unwrap(),
+        config
+            .get_basic_authorization_value()
+            .try_into()
+            .expect("invalid auth value"),
     );
     let client = HttpClient::new(http, base_url).with_default_headers(headers);
 
