@@ -33,11 +33,14 @@ const URL: &str = "wss://beta.superchain.app/websocket";
 #[tokio::main]
 async fn main() {
     // First, we create a new client
-    // TODO: set the basic auth token below to the one given to you
     let mut req = URL.into_client_request().expect("invalid url");
+    let config = Config::from_env();
     req.headers_mut().append(
         AUTHORIZATION,
-        HeaderValue::from_str("Basic xxxxxxxxxxxxxxxxxxxxxxxx").expect("invalid header value"),
+        config
+            .get_basic_authorization_value()
+            .try_into()
+            .expect("invalid auth value"),
     );
 
     let (websocket, _) = connect_async(req).await.unwrap();
