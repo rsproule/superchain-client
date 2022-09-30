@@ -6,6 +6,11 @@ use superchain_client::{
     ethers::types::H160, futures::StreamExt, tokio_tungstenite::connect_async, WsClient,
 };
 
+use tungstenite::{
+    client::IntoClientRequest,
+    http::{header::AUTHORIZATION, HeaderValue},
+};
+
 /// The list of pairs we want to receive event for
 /// An empty list, or `None` means all pairs
 const PAIRS_FILTER: [&str; 0] = [];
@@ -21,8 +26,14 @@ const URL: &str = "wss://beta.superchain.app/websocket";
 #[tokio::main]
 async fn main() {
     // First, we create a new client
-    // If you need to provide auth headers, you can pass a custom `Request` to `connect_async`
-    let (websocket, _) = connect_async(URL).await.unwrap();
+    // TODO: set the basic auth token below to the one given to you
+    let mut req = URL.into_client_request().expect("invalid url");
+    req.headers_mut().append(
+        AUTHORIZATION,
+        HeaderValue::from_str("Basic xxxxxxxxxxxxxxxxxxxxxxxx").expect("invalid header value"),
+    );
+
+    let (websocket, _) = connect_async(req).await.unwrap();
     let client = WsClient::new(websocket).await;
 
     // Then we tell the WsClient that we want pair created events
