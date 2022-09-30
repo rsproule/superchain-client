@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 // A lot of crates that you might need are reexported from `superchain-client`
 // Checkout the `[dev-dependencies]` section for deps that you might have to include manually
 use superchain_client::{
@@ -9,9 +11,9 @@ use superchain_client::{
 
 /// The list of pairs we want to receive event for
 /// An empty list, or `None` means all pairs
-const PAIRS_FILTER: [H160; 0] = [];
+const PAIRS_FILTER: [&str; 1] = ["0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc"];
 /// The block height we want to receive prices from
-const FROM_BLOCK: Option<u64> = Some(15_000_000);
+const FROM_BLOCK: Option<u64> = Some(15_645_429);
 /// the block height we want to receive prices to (inclusive)
 /// `None` means continue streaming from head
 const TO_BLOCK_INC: Option<u64> = None;
@@ -26,8 +28,11 @@ async fn main() {
     let client = WsClient::new(websocket).await;
 
     // Then we tell the WsClient that we want uniswap v2 prices
+    let pairs = PAIRS_FILTER
+        .iter()
+        .map(|pair| H160::from_str(pair).unwrap());
     let stream = client
-        .get_prices(PAIRS_FILTER, FROM_BLOCK, TO_BLOCK_INC)
+        .get_prices(pairs, FROM_BLOCK, TO_BLOCK_INC)
         .await
         .unwrap();
     futures::pin_mut!(stream);

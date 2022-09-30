@@ -5,16 +5,19 @@ use std::str::FromStr;
 use superchain_client::{
     ethers::types::H160,
     futures::{self, StreamExt},
-    reqwest::Client,
+    reqwest::{
+        header::{HeaderMap, HeaderValue},
+        Client,
+    },
     url::Url,
     HttpClient,
 };
 
 /// The pair we want to receive prices for
 /// (This is randomly selected)
-const PAIR: &str = "0x5281e311734869c64ca60ef047fd87759397efe6";
+const PAIR: &str = "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc";
 /// The block height we want to receive logs from
-const FROM_BLOCK: u64 = 15_000_000;
+const FROM_BLOCK: u64 = 15_569_717;
 /// The base url endpoint
 const BASE_URL: &str = "https://beta.superchain.app/";
 
@@ -24,7 +27,12 @@ async fn main() {
     // If you need to provide auth headers, you can call `HttpClient::with_default_headers`
     let http = Client::new();
     let base_url = Url::from_str(BASE_URL).unwrap();
-    let client = HttpClient::new(http, base_url);
+    let mut headers = HeaderMap::new();
+    headers.append(
+        "Authorization",
+        HeaderValue::from_str("Basic xxxxxxxxxxxxxxxxxxxxxxxx").unwrap(),
+    );
+    let client = HttpClient::new(http, base_url).with_default_headers(headers);
 
     // Then we tell the HttpClient that we want uniswap v2 prices
     let pair = H160::from_str(PAIR).unwrap();

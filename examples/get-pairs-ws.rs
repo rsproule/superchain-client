@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 // A lot of crates that you might need are reexported from `superchain-client`
 // Checkout the `[dev-dependencies]` section for deps that you might have to include manually
 use superchain_client::{
@@ -6,10 +8,10 @@ use superchain_client::{
 
 /// The list of pairs we want to receive event for
 /// An empty list, or `None` means all pairs
-const PAIRS_FILTER: [H160; 0] = [];
+const PAIRS_FILTER: [&str; 0] = [];
 /// The block height we want to search from
 /// `None` means earliest indexed block (usually 0)
-const FROM_BLOCK: Option<u64> = Some(15_000_000);
+const FROM_BLOCK: Option<u64> = Some(15_645_429);
 /// The block height we want to search to (inclusive)
 /// `None` means continue streaming from head
 const TO_BLOCK_INC: Option<u64> = None;
@@ -24,8 +26,11 @@ async fn main() {
     let client = WsClient::new(websocket).await;
 
     // Then we tell the WsClient that we want pair created events
+    let pairs = PAIRS_FILTER
+        .iter()
+        .map(|pair| H160::from_str(pair).unwrap());
     let stream = client
-        .get_pairs_created(PAIRS_FILTER, FROM_BLOCK, TO_BLOCK_INC)
+        .get_pairs_created(pairs, FROM_BLOCK, TO_BLOCK_INC)
         .await
         .unwrap();
     futures::pin_mut!(stream);
