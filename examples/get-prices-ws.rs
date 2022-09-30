@@ -6,12 +6,11 @@ use superchain_client::{
     ethers::types::H160,
     futures::{self, StreamExt},
     tokio_tungstenite::connect_async,
+    tungstenite::{
+        client::IntoClientRequest,
+        http::{header::AUTHORIZATION, HeaderValue},
+    },
     WsClient,
-};
-
-use tungstenite::{
-    client::IntoClientRequest,
-    http::{header::AUTHORIZATION, HeaderValue},
 };
 
 /// The list of pairs we want to receive event for

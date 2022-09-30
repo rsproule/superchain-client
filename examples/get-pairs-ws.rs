@@ -3,12 +3,14 @@ use std::str::FromStr;
 // A lot of crates that you might need are reexported from `superchain-client`
 // Checkout the `[dev-dependencies]` section for deps that you might have to include manually
 use superchain_client::{
-    ethers::types::H160, futures::StreamExt, tokio_tungstenite::connect_async, WsClient,
-};
-
-use tungstenite::{
-    client::IntoClientRequest,
-    http::{header::AUTHORIZATION, HeaderValue},
+    ethers::types::H160,
+    futures::StreamExt,
+    tokio_tungstenite::connect_async,
+    tungstenite::{
+        client::IntoClientRequest,
+        http::{header::AUTHORIZATION, HeaderValue},
+    },
+    WsClient,
 };
 
 /// The list of pairs we want to receive event for
