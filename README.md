@@ -77,7 +77,15 @@ Just fill in the credentials given to you.
 
 If you get the following error message you need to set the credentials as mentioned above
 
-```thread 'main' panicked at 'SC_USERNAME environment variable: NotPresent', src/config.rs:13:48```
+```
+thread 'main' panicked at 'SC_USERNAME environment variable: NotPresent', src/config.rs:13:48
+```
+
+If you get the message below then the credentials you have supplied are incorrect:
+
+```
+thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Http(Response { status: 401, version: HTTP/1.1, headers: {"content-length": "112", "cache-control": "no-cache", "content-type": "text/html", "www-authenticate": "Basic realm=\"www\"", "connection": "close"}, body: None })', examples/get-prices-ws.rs:38:51
+```
 
 ## Contributing
 
