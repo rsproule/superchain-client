@@ -7,6 +7,10 @@ use superchain_client::{
     ethers::types::H160,
     futures::{self, StreamExt},
     tokio_tungstenite::connect_async,
+    tungstenite::{
+        client::IntoClientRequest,
+        http::{header::AUTHORIZATION, HeaderValue},
+    },
     WsClient,
 };
 

@@ -76,10 +76,39 @@ impl Client {
         .await
     }
 
+    pub async fn get_height(&self) -> Result<u64> {
+        let stream = self
+            .raw_request(Operation::GetHeight)
+            .await?;
+        futures::pin_mut!(stream);
+        let bytes = stream
+            .next()
+            .await
+            .transpose()?
+            .ok_or_else(|| Error::Custom("empty response from websocket".to_owned()))?;
+        let bytes: [u8; 8] = TryFrom::try_from(&*bytes)
+            .map_err(|_| Error::Custom("failed to collect bytes for height bytes".to_owned()))?;
+        Ok(u64::from_ne_bytes(bytes))
+    }
+
     async fn request<T>(&self, operation: Operation) -> Result<impl Stream<Item = Result<T>> + Send>
     where
         T: serde::de::DeserializeOwned + 'static,
     {
+        let raw_data_stream = self.raw_request(operation).await?.boxed();
+
+        let stream = csv_async::AsyncDeserializer::from_reader(raw_data_stream.into_async_read())
+            .into_deserialize()
+            .map_err(Error::from)
+            .into_stream();
+
+        Ok(stream)
+    }
+
+    async fn raw_request(
+        &self,
+        operation: Operation,
+    ) -> Result<impl Stream<Item = Result<Vec<u8>, std::io::Error>> + Send> {
         let (tx, rx) = mpsc::unbounded_channel();
         self.backend_tx
             .send((operation, tx))
@@ -93,15 +122,9 @@ impl Client {
                 Ok(data) => Some((Ok(data), rx)),
                 Err(err) => Some((Err(std::io::Error::new(std::io::ErrorKind::Other, err)), rx)),
             }
-        })
-        .boxed();
+        });
 
-        let stream = csv_async::AsyncDeserializer::from_reader(raw_data_stream.into_async_read())
-            .into_deserialize()
-            .map_err(Error::from)
-            .into_stream();
-
-        Ok(stream)
+        Ok(raw_data_stream)
     }
 }
 
@@ -257,6 +280,7 @@ enum Operation {
         start: Option<u64>,
         end: Option<u64>,
     },
+    GetHeight,
 }
 
 struct Header {

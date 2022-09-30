@@ -103,6 +103,19 @@ impl Client {
         self.request(url).await
     }
 
+    pub async fn get_height(
+        &self,
+    ) -> Result<u64> {
+        let height = self.inner
+            .get("/api/eth/height")
+            .send()
+            .await?
+            .error_for_status()?
+            .json::<u64>()
+            .await?;
+        Ok(height)
+    }
+
     async fn request<T>(&self, url: url::Url) -> Result<impl Stream<Item = Result<T>> + Send>
     where
         T: serde::de::DeserializeOwned + 'static,
