@@ -8,7 +8,7 @@ use tokio_tungstenite::WebSocketStream;
 use tungstenite::Message;
 
 use crate::{
-    types::{PairCreated, Price},
+    types::{PairCreated, Price, Reserves},
     Error, Result,
 };
 
@@ -76,10 +76,30 @@ impl Client {
         .await
     }
 
+    /// Get the reserves v2 price quotes for the provided `pairs_filter` within the specified
+    /// block range.
+    ///
+    /// A `pairs_filter` of `[]` or `None` will yield price quotes for all pairs. If one or more
+    /// pair hashes are specified, only price quotes for these pairs will be returned (if present).
+    ///
+    /// A `from_block` of `None` will yield from the earliest indexed block (usually 0).
+    /// A `to_block_inc` of `None` will lead to a head following stream.
+    pub async fn get_reserves(
+        &self,
+        pairs_filter: impl IntoIterator<Item = H160>,
+        from_block: Option<u64>,
+        to_block_inc: Option<u64>,
+    ) -> Result<impl Stream<Item = Result<Reserves>> + Send> {
+        self.request(Operation::GetReserves {
+            pairs: pairs_filter.into_iter().map(|pair| pair.0).collect(),
+            start: from_block,
+            end: to_block_inc,
+        })
+        .await
+    }
+
     pub async fn get_height(&self) -> Result<u64> {
-        let stream = self
-            .raw_request(Operation::GetHeight)
-            .await?;
+        let stream = self.raw_request(Operation::GetHeight).await?;
         futures::pin_mut!(stream);
         let bytes = stream
             .next()
@@ -276,6 +296,11 @@ enum Operation {
         end: Option<u64>,
     },
     GetPrices {
+        pairs: Vec<[u8; 20]>,
+        start: Option<u64>,
+        end: Option<u64>,
+    },
+    GetReserves {
         pairs: Vec<[u8; 20]>,
         start: Option<u64>,
         end: Option<u64>,

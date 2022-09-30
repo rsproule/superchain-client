@@ -2,7 +2,7 @@ use ethers::types::H160;
 use futures::{Stream, StreamExt, TryStreamExt};
 
 use crate::{
-    types::{PairCreated, Price},
+    types::{PairCreated, Price, Reserves},
     Error, Result,
 };
 
@@ -103,10 +103,45 @@ impl Client {
         self.request(url).await
     }
 
-    pub async fn get_height(
+    /// Get the uniswap v2 reserves for the provided `pair` within the specified `block_range`
+    pub async fn get_reserves_in_range(
         &self,
-    ) -> Result<u64> {
-        let height = self.inner
+        pair: H160,
+        block_range: std::ops::RangeInclusive<u64>,
+    ) -> Result<impl Stream<Item = Result<Reserves>> + Send> {
+        self.get_reserves(format!(
+            "{:x}/{}/{}",
+            pair,
+            block_range.start(),
+            block_range.end()
+        ))
+        .await
+    }
+
+    /// Get the uniswap v2 reserves for the provided `pair` `from_block` upwards following head
+    pub async fn get_reserves_live_stream(
+        &self,
+        pair: H160,
+        from_block: u64,
+    ) -> Result<impl Stream<Item = Result<Reserves>> + Send> {
+        self.get_reserves(format!("{:x}/{}", pair, from_block))
+            .await
+    }
+
+    async fn get_reserves(
+        &self,
+        url_suffix: String,
+    ) -> Result<impl Stream<Item = Result<Reserves>> + Send> {
+        let url = self
+            .base_url
+            .join("/api/eth/reserves/")?
+            .join(&url_suffix)?;
+        self.request(url).await
+    }
+
+    pub async fn get_height(&self) -> Result<u64> {
+        let height = self
+            .inner
             .get("/api/eth/height")
             .send()
             .await?

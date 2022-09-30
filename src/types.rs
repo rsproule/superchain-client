@@ -1,4 +1,4 @@
-use ethers::types::{Address, H256, U256};
+use ethers::types::{Address, H256, U128, U256};
 
 /// A uniswap v2 `PairCreated` event
 /// <https://docs.uniswap.org/protocol/V2/reference/smart-contracts/factory#paircreated>
@@ -42,4 +42,23 @@ pub enum Side {
     Buy,
     #[serde(rename = "false")]
     Sell,
+}
+
+#[derive(Clone, Debug, serde::Deserialize, PartialEq)]
+pub struct Reserves {
+    pub event: Type,
+    pub reserve0: U128,
+    pub reserve1: U128,
+    pub amount0: U256,
+    pub amount1: U256,
+    pub lp_amount: U256,
+    pub protocol_fee: Option<U256>,
+}
+
+#[derive(Clone, Copy, Debug, serde::Deserialize, PartialEq)]
+pub enum Type {
+    Mint,
+    Burn,
+    Swap,
+    Sync,
 }
