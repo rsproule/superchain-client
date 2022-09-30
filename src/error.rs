@@ -36,6 +36,9 @@ pub enum Error {
     /// An error encountered during csv parsing
     #[error(transparent)]
     CsvAsync(#[from] csv_async::Error),
+    /// An IO error
+    #[error(transparent)]
+    IO(#[from] std::io::Error),
     /// An error encountered during making HTTP requests
     #[error(transparent)]
     Reqwest(#[from] reqwest::Error),
@@ -48,4 +51,6 @@ pub enum Error {
     /// An error encountered during url parsing
     #[error(transparent)]
     Url(#[from] url::ParseError),
+    #[error("an unexpected error occurred: {0}")]
+    Custom(String),
 }
