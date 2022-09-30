@@ -62,14 +62,19 @@ For more examples have a look at the `examples/` directory.
 
 ## Credentials
 
-You will be given Basic Authorization credentials to use when accessing the http and websocket endpoints. Please make sure you set these correctly before you run the examples.
-You can use this tool to encode the Basic token for you: https://www.debugbear.com/basic-auth-header-generator
+You will be given a username and password to use to access the superchain api. The easiest way to use these credentials is to create a `.env` file in the same folder as this `README.md` file like so:
+```
+SC_USERNAME=xxxxx
+SC_PASSWORD=xxxxx
+```
+Just fill in the credentials given to you.
+
 
 ## Troubleshooting
 
 If you get the following error message you need to set the credentials as mentioned above
 
-```thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Http(Response { status: 401, version: HTTP/1.1, headers: {"content-length": "112", "cache-control": "no-cache", "content-type": "text/html", "www-authenticate": "Basic realm=\"www\"", "connection": "close"}, body: None })', examples/get-pairs-ws.rs:36:51```
+```thread 'main' panicked at 'SC_USERNAME environment variable: NotPresent', src/config.rs:13:48```
 
 ## Contributing
 

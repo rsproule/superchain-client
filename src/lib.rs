@@ -42,6 +42,7 @@ pub use crate::{
     ws::Client as WsClient,
 };
 
+pub mod config;
 mod error;
 mod http;
 mod types;

@@ -3,13 +3,11 @@ use std::str::FromStr;
 // A lot of crates that you might need are reexported from `superchain-client`
 // Checkout the `[dev-dependencies]` section for deps that you might have to include manually
 use superchain_client::{
-    ethers::types::H160, futures::StreamExt, tokio_tungstenite::connect_async, WsClient,
+    config::Config, ethers::types::H160, futures::StreamExt, tokio_tungstenite::connect_async,
+    WsClient,
 };
 
-use tungstenite::{
-    client::IntoClientRequest,
-    http::{header::AUTHORIZATION, HeaderValue},
-};
+use tungstenite::{client::IntoClientRequest, http::header::AUTHORIZATION};
 
 /// The list of pairs we want to receive event for
 /// An empty list, or `None` means all pairs
@@ -26,11 +24,14 @@ const URL: &str = "wss://beta.superchain.app/websocket";
 #[tokio::main]
 async fn main() {
     // First, we create a new client
-    // TODO: set the basic auth token below to the one given to you
     let mut req = URL.into_client_request().expect("invalid url");
+    let config = Config::from_env();
     req.headers_mut().append(
         AUTHORIZATION,
-        HeaderValue::from_str("Basic xxxxxxxxxxxxxxxxxxxxxxxx").expect("invalid header value"),
+        config
+            .get_basic_authorization_value()
+            .try_into()
+            .expect("invalid auth value"),
     );
 
     let (websocket, _) = connect_async(req).await.unwrap();
