@@ -42,7 +42,7 @@ async fn main() {
         .iter()
         .map(|pair| H160::from_str(pair).unwrap());
     let stream = client
-        .get_prices(pairs, FROM_BLOCK, TO_BLOCK_INC)
+        .get_reserves(pairs, FROM_BLOCK, TO_BLOCK_INC)
         .await
         .unwrap();
     futures::pin_mut!(stream);
