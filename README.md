@@ -33,8 +33,14 @@ const URL: &str = "wss://beta.superchain.app/websocket";
 #[tokio::main]
 async fn main() {
     // First, we create a new client
-    // If you need to provide auth headers, you can pass a custom `Request` to `connect_async`
-    let (websocket, _) = connect_async(URL).await.unwrap();
+    // TODO: set the basic auth token below to the one given to you
+    let mut req = URL.into_client_request().expect("invalid url");
+    req.headers_mut().append(
+        AUTHORIZATION,
+        HeaderValue::from_str("Basic xxxxxxxxxxxxxxxxxxxxxxxx").expect("invalid header value"),
+    );
+
+    let (websocket, _) = connect_async(req).await.unwrap();
     let client = WsClient::new(websocket).await;
 
     // Then we tell the WsClient that we want uniswap v2 prices
@@ -53,6 +59,17 @@ async fn main() {
 ```
 
 For more examples have a look at the `examples/` directory.
+
+## Credentials
+
+You will be given Basic Authorization credentials to use when accessing the http and websocket endpoints. Please make sure you set these correctly before you run the examples.
+You can use this tool to encode the Basic token for you: https://www.debugbear.com/basic-auth-header-generator
+
+## Troubleshooting
+
+If you get the following error message you need to set the credentials as mentioned above
+
+```thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Http(Response { status: 401, version: HTTP/1.1, headers: {"content-length": "112", "cache-control": "no-cache", "content-type": "text/html", "www-authenticate": "Basic realm=\"www\"", "connection": "close"}, body: None })', examples/get-pairs-ws.rs:36:51```
 
 ## Contributing
 
